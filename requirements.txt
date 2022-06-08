@@ -74,3 +74,14 @@ waitress==1.4.4
 Werkzeug==1.0.1
 whitenoise==3.2.1
 wrapt==1.12.1
+
+
+django==3.2
+djangorestframework==3.12.4
+Pillow==8.4.0
+django-cors-headers
+gunicorn
+djangorestframework_simplejwt
+django-filter
+mysqlclient
+python-decouple

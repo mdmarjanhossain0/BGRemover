@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="{% static 'css/loading.css' %}" />
 
 
-	<title>AppBytes</title>
+	<title>BG-Remover</title>
 </head>
 
 <body>
@@ -28,7 +28,6 @@
 			<input type="checkbox" id="menu-bar">
 			<label for="menu-bar" class="fas fa-bars"></label>
 			<nav class="navbar">
-				<a href="#home">Courses</a>
 				<a href="#home">Blogs</a>
 				<a href="#home">Services</a>
 				<a href="#home">Contact</a>
@@ -53,15 +52,14 @@
 			<div class="process" id="home-process">
 				<div class="process-container">
 					<h1>Processed Image</h1>
-					<div class="progressing">
+					<div class="progressing" id="home-process-progressing">
 						<div class="loading"></div>
 					</div>
-					<!-- <img src="./images/download.png" /> -->
+					<img src="./images/download.png" id="home-process-image"/>
 					<div class="control">
-
-						<button class="upload-button">
+						<a href="#" download="" id="home-process-download"><button class="upload-button">
 							<i class="fa-solid fa-download"></i> Download
-						</button>
+						</button></a>
 					</div>
 				</div>
 			</div>
@@ -203,41 +201,31 @@
 			console.log("upload file")
 			var process = document.getElementById("home-process")
 			var details = document.getElementById("home-details")
+			var progress = document.getElementById("home-process-progressing")
+			var image = document.getElementById("home-process-image")
+			var download = document.getElementById("home-process-download")
 			process.style.display = "block"
 			details.style.display = "none"
+			image.style.display = "none"
+			download.style.display = "none"
 
-			// const formData = new FormData();
-			// const imagefile = document.querySelector('#gallery');
-			// console.log(imagefile)
-			// formData.append("image", imagefile.files[0]);
+			const formData = new FormData();
+			formData.append("image", file);
 
-			// axios.post('/api-bgremover/image/upload/', formData, {
-			// 		headers: {
-			// 			'Content-Type': 'multipart/form-data'
-			// 		}
-			// 	})
-				var url = 'http://127.0.0.1:8000/api-bgremover/image/upload/'
-				var xhr = new XMLHttpRequest()
-				var formData = new FormData()
-				xhr.open('POST', url, true)
-				xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-
-				// Update progress (can be used to show progress indicator)
-				xhr.upload.addEventListener("progress", function (e) {
-				    updateProgress(i, (e.loaded * 100.0 / e.total) || 100)
+			axios.post('/api-bgremover/image/upload/', formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				}).then(response => {
+					progress.style.display = "none"
+					image.style.display = "block"
+					download.style.display = "block"
+					image.src = response.data.response
+					download.href = response.data.response
 				})
-
-				xhr.addEventListener('readystatechange', function (e) {
-				    if (xhr.readyState == 4 && xhr.status == 200) {
-				        updateProgress(i, 100) // <- Add this
-				    } else if (xhr.readyState == 4 && xhr.status != 200) {
-				        // Error. Inform the user
-				    }
+				.then(error => {
+					console.log(error)
 				})
-
-				formData.append('upload_preset', 'ujpu6gyk')
-				formData.append('file', file)
-				xhr.send(formData)
 			}
 	</script>
 </body>

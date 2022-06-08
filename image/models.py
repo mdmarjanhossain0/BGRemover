@@ -1,8 +1,11 @@
 from django.db import models
 
+from datetime import datetime
+
 
 def upload_loacation(instance,filename):
-	file_path = 'img/{filename}'.format(
+	file_path = 'img/{time}-{filename}'.format(
+			time = datetime.now(),
 			filename = filename
 		)
 	return file_path

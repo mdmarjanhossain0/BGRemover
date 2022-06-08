@@ -27,16 +27,28 @@ def api_upload_image(request):
 
 		if serializer.is_valid():
 			data = serializer.save()
-			print(data)
-			path=data.image.url
-			cutout(path)
+			path=data.image.path
+
+
+
+
+			try:
+				cutout(path)
+			except:
+				return Response(data = {
+					"status": "error",
+					"response": "Some this is wrong. It cann't possible to process"
+			}, status = status.HTTP_400_BAD_REQUEST)
 			return Response(data = {
-				"response": path
+				"status": "success",
+				"response": data.image.url
 			})
 		else:
+			print(serializer.errors)
 			return Response(data = {
-				"response": "error"
-			})
+				"status": "error",
+				"response": serializer.errors,
+			}, status = status.HTTP_400_BAD_REQUEST)
 
 
 

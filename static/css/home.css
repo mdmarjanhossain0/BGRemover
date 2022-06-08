@@ -165,7 +165,7 @@
 
 .home .process .process-container img {
     width: inherit;
-    border: 2px dashed var(--gray);
+    /* border: 2px dashed var(--gray); */
 }
 
 .home .process .process-container button {

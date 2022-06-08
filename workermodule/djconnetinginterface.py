@@ -12,7 +12,7 @@ from .inference import BGRemove
 def cutout(path):
 
     print(path)
-    path = path[1:]
+    # path = path[1:]
     output_path = "media/img/"
 
     bg_remover = BGRemove()
