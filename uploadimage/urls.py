@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",include("image.urls")),
+    path("api-bgremover/image/", include("image.api.urls", "image_api"))
 ]
 
 if settings.DEBUG:

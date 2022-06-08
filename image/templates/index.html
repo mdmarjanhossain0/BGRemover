@@ -1,42 +1,245 @@
-{% extends 'base.html' %}
-
 {% load static %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-    <div class="container center">
-      
-        <form action="." method="post"  enctype="multipart/form-data">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            {% csrf_token %}
-            {{form.as_p}}
-           
-            <button type="submit" class="submit-button btn btn-lg btn-primary btn-bloc">Upload</button>
-        </form>
-       
-        {% if obj %}
-        <h3>Succesfully Removed : {{img_obj.caption}}</h3>
-        <img src="{{ obj.image.url}}" alt="image" class="img-thumbnail"  >
-        {% endif %}
-        <hr>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/home.css' %}" />
 
-      
-        {% for x in img %}
-        {% if forloop.first %}<div class="row ">{% endif %}
-            <div class="col-lg-4 col-md-4 col-12" >
-        <div class="text-center mt-2">
-            <img src="{{x.image.url}}"  height="70%" width="70%" class="img-thumbnail" alt="...">
-            <h2 class="text-center" >{{x.caption}}</h2></div>
-            </div>
-            {% if forloop.counter|divisibleby:3 %}
-        </div>
-        <div class=row>{% endif %}
-        
-            {% if forloop.last %}</div>{% endif %}
-    
-        {% endfor %}
+	<link rel="stylesheet" href="{% static 'css/test.css' %}" />
 
-    </div>
+	<link rel="stylesheet" href="{% static 'css/loading.css' %}" />
 
 
-{% endblock content %}
+	<title>AppBytes</title>
+</head>
+
+<body>
+
+	<div class="top">
+		<header id="navbar">
+			<a href="#" class="logo">BG-Remover<span>(AppBytes)</span></a>
+			<input type="checkbox" id="menu-bar">
+			<label for="menu-bar" class="fas fa-bars"></label>
+			<nav class="navbar">
+				<a href="#home">Courses</a>
+				<a href="#home">Blogs</a>
+				<a href="#home">Services</a>
+				<a href="#home">Contact</a>
+			</nav>
+		</header>
+
+
+
+
+
+
+
+
+		<section class="home">
+			<div class="details" id="home-details">
+				<div class="content">
+					<h1>Free Automatically Remove Your Background</h1>
+					<p>Its tataly free your all users. For Developer, we provides free api.</p>
+				</div>
+				<img src="{% static 'images/half-background.jpg' %}" />
+			</div>
+			<div class="process" id="home-process">
+				<div class="process-container">
+					<h1>Processed Image</h1>
+					<div class="progressing">
+						<div class="loading"></div>
+					</div>
+					<!-- <img src="./images/download.png" /> -->
+					<div class="control">
+
+						<button class="upload-button">
+							<i class="fa-solid fa-download"></i> Download
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="upload">
+				<div class="upload-box dropzone" id="drop-area">
+					<input type="file" class="input-image">
+					<div class="icon">
+						<i class="fa-solid fa-box-open"></i>
+					</div>
+
+					<input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+					<label class="upload-button" for="fileElem"><i class="fa-solid fa-upload"></i> Upload Image</label>
+					<h1>Or Drop a image</h1>
+
+					<div class="bottom">
+						Paste image url
+					</div>
+				</div>
+
+
+
+
+
+
+				<div id="drop-area">
+					<progress id="progress-bar" max=100 value=0></progress>
+					<div id="gallery"></div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+
+	<!-- <div id="drop-area">
+		<form class="my-form">
+			<p>Drag or upload at a time one image</p>
+			<input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+			<label class="button" for="fileElem">Select some files</label>
+		</form>
+		<progress id="progress-bar" max=100 value=0></progress>
+		<div id="gallery"></div>
+	</div> -->
+
+	<div class="botm"></div>
+
+
+
+
+
+
+
+
+
+
+	<script src="{% static 'js/sticky.js' %}"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+
+
+	<script>
+		let dropArea = document.getElementById("drop-area");
+		['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+			dropArea.addEventListener(eventName, preventDefaults, false)
+			document.body.addEventListener(eventName, preventDefaults, false)
+		})
+
+		;
+		['dragenter', 'dragover'].forEach(eventName => {
+			dropArea.addEventListener(eventName, highlight, false)
+		})
+
+		;
+		['dragleave', 'drop'].forEach(eventName => {
+			dropArea.addEventListener(eventName, unhighlight, false)
+		})
+
+		dropArea.addEventListener('drop', handleDrop, false)
+
+		function preventDefaults(e) {
+			e.preventDefault()
+			e.stopPropagation()
+		}
+
+		function highlight(e) {
+			dropArea.classList.add('highlight')
+		}
+
+		function unhighlight(e) {
+			dropArea.classList.remove('active')
+		}
+
+		function handleDrop(e) {
+			var dt = e.dataTransfer
+			var files = dt.files
+
+			handleFiles(files)
+		}
+
+		let uploadProgress = []
+		let progressBar = document.getElementById('progress-bar')
+
+		function initializeProgress(numFiles) {
+			progressBar.value = 0
+			uploadProgress = []
+
+			for (let i = numFiles; i > 0; i--) {
+				uploadProgress.push(0)
+			}
+		}
+
+		function updateProgress(fileNumber, percent) {
+			uploadProgress[fileNumber] = percent
+			let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
+			progressBar.value = total
+		}
+
+		function handleFiles(files) {
+			files = [...files]
+			initializeProgress(files.length)
+			previewFile(files[0])
+			uploadFile(files[0])
+			// files.forEach(uploadFile)
+			// files.forEach(previewFile)
+		}
+
+		function previewFile(file) {
+			let reader = new FileReader()
+			reader.readAsDataURL(file)
+			reader.onloadend = function () {
+				let img = document.createElement('img')
+				img.src = reader.result
+				document.getElementById('gallery').appendChild(img)
+			}
+		}
+
+		function uploadFile(file, i) {
+			console.log("upload file")
+			var process = document.getElementById("home-process")
+			var details = document.getElementById("home-details")
+			process.style.display = "block"
+			details.style.display = "none"
+
+			// const formData = new FormData();
+			// const imagefile = document.querySelector('#gallery');
+			// console.log(imagefile)
+			// formData.append("image", imagefile.files[0]);
+
+			// axios.post('/api-bgremover/image/upload/', formData, {
+			// 		headers: {
+			// 			'Content-Type': 'multipart/form-data'
+			// 		}
+			// 	})
+				var url = 'http://127.0.0.1:8000/api-bgremover/image/upload/'
+				var xhr = new XMLHttpRequest()
+				var formData = new FormData()
+				xhr.open('POST', url, true)
+				xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+
+				// Update progress (can be used to show progress indicator)
+				xhr.upload.addEventListener("progress", function (e) {
+				    updateProgress(i, (e.loaded * 100.0 / e.total) || 100)
+				})
+
+				xhr.addEventListener('readystatechange', function (e) {
+				    if (xhr.readyState == 4 && xhr.status == 200) {
+				        updateProgress(i, 100) // <- Add this
+				    } else if (xhr.readyState == 4 && xhr.status != 200) {
+				        // Error. Inform the user
+				    }
+				})
+
+				formData.append('upload_preset', 'ujpu6gyk')
+				formData.append('file', file)
+				xhr.send(formData)
+			}
+	</script>
+</body>
+
+</html>
