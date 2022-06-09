@@ -14,6 +14,7 @@ from workermodule.djconnetinginterface import cutout
 
 from rembg import remove
 import cv2
+from PIL import Image
 
 
 import os
@@ -41,13 +42,23 @@ def api_upload_image(request):
 			# try:
 				# cutout(path)
 
+			# pre, ext = os.path.splitext(path)
+			# os.rename(path, pre + ".png")
+			# filename = path.split('/')[-1]
+			# output_path = "output.png"
+			# input = cv2.imread(pre + ".png")
+			# output = remove(input)
+			# cv2.imwrite(pre + ".png", output)
+
 			pre, ext = os.path.splitext(path)
 			os.rename(path, pre + ".png")
 			filename = path.split('/')[-1]
 			output_path = "output.png"
-			input = cv2.imread(pre + ".png")
+			input = Image.open(path)
 			output = remove(input)
-			cv2.imwrite(pre + ".png", output)
+			output.save(path)
+
+
 			# except:
 			# 	return Response(data = {
 			# 		"status": "error",
