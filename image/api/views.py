@@ -13,7 +13,7 @@ from image.api.serializers import ImageSerializer
 from workermodule.djconnetinginterface import cutout
 
 from rembg import remove
-import cv2
+# import cv2
 from PIL import Image
 
 
