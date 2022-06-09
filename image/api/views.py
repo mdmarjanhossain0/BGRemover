@@ -10,7 +10,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 from image.api.serializers import ImageSerializer
 
-from workermodule.djconnetinginterface import cutout
+# from workermodule.djconnetinginterface import cutout
 
 from rembg import remove
 # import cv2

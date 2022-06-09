@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from .form import ImageForm
 from .models import Image
 
-from workermodule.djconnetinginterface import cutout
+# from workermodule.djconnetinginterface import cutout
 
 
 
