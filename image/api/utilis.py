@@ -33,7 +33,26 @@ def marge(img1, img2, pre):
     cv2.imwrite(output_path, marge)
 
 
+def resize_image(path, width, height):
+    input = cv2.imread(path)
+    resize_image = cv2.resize(input, (width, height))
+    cv2.imwrite(path, resize_image)
+
+
+def center_crop_image(path, width, height):
+    input = cv2.imread(path)
+
+    print(input.shape)
+    w = input.shape[1]
+    h = input.shape[0]
+    start_x = int((w / 2) - (width / 2))
+    start_y = int((h / 2) - (height / 2))
+    crop = input[start_y : start_y + height, start_x : start_x + width]
+    cv2.imwrite(path, crop)
+
+
 def remove_bacground_from_image(path):
+    resize_image(path, 500, 500)
     pre, ext = os.path.splitext(path)
     os.rename(path, f"{pre}.png")
     filename = path.split("/")[-1]
