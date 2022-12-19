@@ -10,21 +10,27 @@
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
-	<link rel="stylesheet" href="{% static 'css/home.css' %}" />
+	<!-- <link rel="stylesheet" href="{% static 'css/home.css' %}" /> -->
 
 	<link rel="stylesheet" href="{% static 'css/test.css' %}" />
 
 	<link rel="stylesheet" href="{% static 'css/loading.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/about.css' %}" />
+
+
+	<title>Background Remover</title>
 
 
 	<title>BG-Remover</title>
 </head>
+{% include "css/home.html" %}
 
 <body>
 
 	<div class="top">
 		<header id="navbar">
-			<a href="#" class="logo">BG-Remover<span>(AppBytes)</span></a>
+			<a href="#" class="logo">Background Remover</a>
 			<input type="checkbox" id="menu-bar">
 			<label for="menu-bar" class="fas fa-bars"></label>
 			<nav class="navbar">
@@ -34,18 +40,10 @@
 			</nav>
 		</header>
 
-
-
-
-
-
-
-
 		<section class="home">
 			<div class="details" id="home-details">
 				<div class="content">
-					<h1>Free Automatically Remove Your Background</h1>
-					<p>Its tataly free your all users. For Developer, we provides free api.</p>
+					<h1>Automatically Remove Your Background</h1>
 				</div>
 				<img src="{% static 'images/half-background.jpg' %}" />
 			</div>
@@ -55,11 +53,13 @@
 					<div class="progressing" id="home-process-progressing">
 						<div class="loading"></div>
 					</div>
-					<img src="./images/download.png" id="home-process-image"/>
+					<img src="./images/download.png" id="home-process-image" />
 					<div class="control">
-						<a href="#" download="" id="home-process-download"><button class="upload-button">
-							<i class="fa-solid fa-download"></i> Download
-						</button></a>
+						<a href="#" download="" id="home-process-download">
+							<button class="upload-button">
+								<i class="fa-solid fa-download"></i> Download
+							</button>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -104,7 +104,59 @@
 		<div id="gallery"></div>
 	</div> -->
 
-	<div class="botm"></div>
+
+	<div class="about" id="about" data-aos="fade-up">
+		<div class="left">
+			<img src="{% static 'images/half-background.jpg' %}" alt="about" class="about-img" />
+		</div>
+		<div class="right" data-aos="fade-up" data-aos-anchor=".about">
+			<h3>About us</h3>
+			<p class="about-title">AI Base Background Remover Service</p>
+
+			<ul>
+				<li>
+					We can detect human a automatically remove it's background
+				</li>
+				<li> We can detect animal a automatically remove it's background</li>
+				<li> We can detect cloth a automatically remove it's background. You can use it your E Commerce website.
+				</li>
+			</ul>
+			<button>Get started ➡</button>
+		</div>
+	</div>
+
+
+	<div class="footer" id="footer">
+		<div class="footer-boxes">
+			<ul class="footer-lists">
+				<li class="footer-list-first footer-list">About us</li>
+				<li class="footer-list">
+					<a class="footer-link" href="/">AI Support</a>
+				</li>
+			</ul>
+			<ul class="footer-lists">
+				<li class="footer-list-first footer-list">Our Services</li>
+				<li class="footer-list">
+					<a class="footer-link" href="/">Image Background Remover</a>
+				</li>
+				<li class="footer-list">
+					<a class="footer-link" href="/">Video Background Remover</a>
+				</li>
+			</ul>
+			<ul class="footer-lists">
+				<li class="footer-list-first footer-list">Terms</li>
+				<li class="footer-list">
+					<a class="footer-link" href="/">Terms Of Service </a>
+				</li>
+				<li class="footer-list">
+					<a class="footer-link" href="/">Privacy Policy </a>
+				</li>
+			</ul>
+		</div>
+		<p class="footer-caption">
+			&copy; 2022 AppBytes. All rights reserved.
+		</p>
+	</div>
 
 
 
@@ -114,120 +166,14 @@
 
 
 
-
-	<script src="{% static 'js/sticky.js' %}"></script>
+	{% include "js/dropdown.html" %}
+	<!-- <script src="{% static 'js/sticky.js' %}"></script> -->
+	<!-- <script src="{% static 'js/draganddrop.js' %}"></script> -->
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
 
 
-	<script>
-		let dropArea = document.getElementById("drop-area");
-		['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-			dropArea.addEventListener(eventName, preventDefaults, false)
-			document.body.addEventListener(eventName, preventDefaults, false)
-		})
-
-		;
-		['dragenter', 'dragover'].forEach(eventName => {
-			dropArea.addEventListener(eventName, highlight, false)
-		})
-
-		;
-		['dragleave', 'drop'].forEach(eventName => {
-			dropArea.addEventListener(eventName, unhighlight, false)
-		})
-
-		dropArea.addEventListener('drop', handleDrop, false)
-
-		function preventDefaults(e) {
-			e.preventDefault()
-			e.stopPropagation()
-		}
-
-		function highlight(e) {
-			dropArea.classList.add('highlight')
-		}
-
-		function unhighlight(e) {
-			dropArea.classList.remove('active')
-		}
-
-		function handleDrop(e) {
-			var dt = e.dataTransfer
-			var files = dt.files
-
-			handleFiles(files)
-		}
-
-		let uploadProgress = []
-		let progressBar = document.getElementById('progress-bar')
-
-		function initializeProgress(numFiles) {
-			progressBar.value = 0
-			uploadProgress = []
-
-			for (let i = numFiles; i > 0; i--) {
-				uploadProgress.push(0)
-			}
-		}
-
-		function updateProgress(fileNumber, percent) {
-			uploadProgress[fileNumber] = percent
-			let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
-			progressBar.value = total
-		}
-
-		function handleFiles(files) {
-			files = [...files]
-			initializeProgress(files.length)
-			previewFile(files[0])
-			uploadFile(files[0])
-			// files.forEach(uploadFile)
-			// files.forEach(previewFile)
-		}
-
-		function previewFile(file) {
-			let reader = new FileReader()
-			reader.readAsDataURL(file)
-			reader.onloadend = function () {
-				let img = document.createElement('img')
-				img.src = reader.result
-				document.getElementById('gallery').appendChild(img)
-			}
-		}
-
-		function uploadFile(file, i) {
-			console.log("upload file")
-			var process = document.getElementById("home-process")
-			var details = document.getElementById("home-details")
-			var progress = document.getElementById("home-process-progressing")
-			var image = document.getElementById("home-process-image")
-			var download = document.getElementById("home-process-download")
-			process.style.display = "block"
-			details.style.display = "none"
-			image.style.display = "none"
-			download.style.display = "none"
-
-			const formData = new FormData();
-			formData.append("image", file);
-
-			axios.post('/api-bgremover/image/upload/', formData, {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				}).then(response => {
-					progress.style.display = "none"
-					image.style.display = "block"
-					download.style.display = "block"
-					image.src = response.data.response
-					download.href = response.data.response
-				})
-				.then(error => {
-					console.log(error)
-				})
-			}
-	</script>
 </body>
 
 </html>
