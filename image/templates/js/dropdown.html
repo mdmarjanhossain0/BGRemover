@@ -90,7 +90,7 @@
         const formData = new FormData();
         formData.append("image", file);
 
-        axios.post('/api-bgremover/image/upload/', formData, {
+        axios.post('/api/image/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

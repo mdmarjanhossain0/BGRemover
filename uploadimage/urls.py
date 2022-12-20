@@ -16,7 +16,6 @@ from account.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("image.urls")),
-    path("api-bgremover/image/", include("image.api.urls", "image_api")),
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("must_authenticate/", must_authenticate_view, name="must_authenticate"),
@@ -24,6 +23,7 @@ urlpatterns = [
     path("account/", account_view, name="account"),
     # REST-framework
     path("api/account/", include("account.api.urls", "account_api")),
+    path("api/image/", include("image.api.urls", "image_api")),
     # Password reset links (ref: https://github.com/django/django/blob/master/django/contrib/auth/views.py)
     path(
         "password_change/done/",

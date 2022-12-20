@@ -51,9 +51,24 @@ def center_crop_image(path, width, height):
     cv2.imwrite(path, crop)
 
 
-def remove_bacground_from_image(path):
-    resize_image(path, 500, 500)
+def remove_bacground_from_image(path, width=None, height=None):
+
+    print(width)
+    print(height)
+    if width == None or height == None:
+        pass
+    else:
+        if width < 0 or height < 0:
+            pass
+        else:
+            try:
+                resize_image(path, width, height)
+            except:
+                raise Exception("Resizing error")
     pre, ext = os.path.splitext(path)
     os.rename(path, f"{pre}.png")
     filename = path.split("/")[-1]
-    rembg_algo(path)
+    try:
+        rembg_algo(path)
+    except:
+        pass

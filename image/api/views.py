@@ -28,10 +28,21 @@ def api_upload_image(request):  # sourcery skip: avoid-builtin-shadow
 
     if serializer.is_valid():
         data = serializer.save()
-        path = data.image.path
-        remove_bacground_from_image(path)
+        try:
+            path = data.image.path
+            width = data.width
+            height = data.height
+            remove_bacground_from_image(path, width, height)
 
-        return Response(data={"status": "success", "response": data.image.url})
+            return Response(data={"status": "success", "response": data.image.url})
+        except BaseException as e:
+            return Response(
+                data={
+                    "status": "error",
+                    "response": str(e),
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
     else:
         print(serializer.errors)
         return Response(
